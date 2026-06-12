@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Homepage</title>
+</head>
+<body>
+<script src="{{ url_for('static', filename='js/register.js') }}" defer></script>
+    <h1>Register</h1>
+    <form id="register-form">
+        <label>
+            Username:
+            <input type="text" name="username">
+        </label>
+        <br><br>
+        <label>
+            Email:
+            <input type="email" name="email">
+        </label>
+        <br><br>
+        <label>
+            Password:
+            <input type="password" name="password">
+        </label>
+        <br><br>
+        <button type="submit">Submit</button>
+    </form>
+</body>
+</html>
