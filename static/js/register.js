@@ -16,6 +16,9 @@ form.addEventListener('submit', async (event) => {
     const data = await response.json()
     if (data.success) {
         form.reset() // Clear inputs
+        window.location.href = '/login'
+    } else {
+        alert(data.message)
     }
     console.log(data)
 })

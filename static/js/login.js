@@ -16,6 +16,9 @@ form.addEventListener('submit', async (event) => {
     const data = await response.json()
     if (data.success) {
         form.reset()
+        window.location.href = '/'
+    } else {
+        alert(data.message)
     }
     console.log(data)
 })

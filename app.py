@@ -1,18 +1,33 @@
 import os
+from functools import wraps
 
 from flask import Flask, render_template, request, session
-from werkzeug.security import generate_password_hash, check_password_hash
+from werkzeug.security import generate_password_hash
 
-from controllers.user_controller import create_user, delete_user, login_user
+from controllers.user_controller import create_user, delete_user, login_user, get_user_by_id
 
 app = Flask(__name__)
 app.secret_key = os.getenv('SECRET_KEY')
 
+def login_required(func):
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        if 'user_id' not in session:
+            return {
+                'success' : False,
+                'message' : 'Unauthorized'
+            }, 401
+
+        return func(*args, **kwargs)
+
+    return wrapper
+
 # Frontend
 
 @app.route('/')
+@login_required
 def home():
-    return render_template('index.html')
+    return render_template('index.html', user=get_user_by_id(session['user_id']))
 
 @app.route('/register')
 def register():
@@ -113,6 +128,8 @@ def logout_user_route():
             }, 204 # No content
 
     except Exception as e:
+        print(e)
+
         return {
             'success' : False,
             'message' : 'Internal server error'
