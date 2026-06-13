@@ -4,7 +4,8 @@ from functools import wraps
 from flask import Flask, render_template, request, session, redirect, url_for
 from werkzeug.security import generate_password_hash
 
-from controllers.user_controller import create_user, delete_user, login_user, get_user_by_id, get_all_users
+from controllers.user_controller import create_user, delete_user, login_user, get_user_by_id, get_all_users, \
+    change_profile_picture
 
 app = Flask(__name__)
 app.secret_key = os.getenv('SECRET_KEY')
@@ -43,6 +44,12 @@ def admin_required(func):
 @login_required
 def home():
     return render_template('index.html', user=get_user_by_id(session['user_id']))
+
+@app.route('/profile')
+@login_required
+def user_profile():
+    user_info = get_user_by_id(session['user_id'])
+    return render_template('user_profile.html', user=user_info)
 
 @app.route('/register')
 def register():
@@ -151,6 +158,34 @@ def logout_user_route():
                 'success' : True,
                 'message' : 'User was logged out'
             }, 204 # No content
+
+    except Exception as e:
+        print(e)
+
+        return {
+            'success' : False,
+            'message' : 'Internal server error'
+        }, 500
+
+@app.route('/api/change_user_picture', methods=['PUT'])
+def change_user_picture():
+    data = request.get_json()
+    user_id = session['user_id']
+    url = data.get('pfp_url')
+    try:
+        if request.method == 'PUT':
+            user = change_profile_picture(user_id, url)
+
+            if user is None:
+                return {
+                    'success' : False,
+                    'message' : 'User not found'
+                }, 404
+
+            return {
+                'success' : True,
+                'message' : 'Changed profile picture'
+            }, 200
 
     except Exception as e:
         print(e)

@@ -24,7 +24,7 @@ def get_user_by_id(user_id):
     try:
         conn = get_connection()
         cursor = conn.cursor(cursor_factory=RealDictCursor)
-        cursor.execute('''SELECT id, username, email, role FROM users WHERE id = %s''', (user_id,))
+        cursor.execute('''SELECT id, username, email, role, pfp_url FROM users WHERE id = %s''', (user_id,))
         user = cursor.fetchone()
 
         return user
@@ -95,6 +95,28 @@ def login_user(email, password):
             return user
 
         return None
+
+    except Exception:
+        raise
+
+    finally:
+        if 'cursor' in locals():
+            cursor.close()
+        if 'conn' in locals():
+            conn.close()
+
+def change_profile_picture(user_id, url):
+    try:
+        conn = get_connection()
+        cursor = conn.cursor(cursor_factory=RealDictCursor)
+        cursor.execute('''UPDATE users SET pfp_url = %s WHERE id = %s RETURNING *''', (url, user_id,))
+        conn.commit()
+        user = cursor.fetchone()
+
+        if user is None:
+            return None
+
+        return user.pop('password', None)
 
     except Exception:
         raise

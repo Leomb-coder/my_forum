@@ -1,13 +1,99 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-bs-theme="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
     <title>Home</title>
 </head>
 <body>
 <script src="{{ url_for('static', filename='js/index.js') }}" defer></script>
-    <h1>Welcome to my forum {{ user.username }}</h1>
-    <button id="logout-button">Logout</button>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous" defer></script>
+
+    <div class="container-fluid">
+        <!-- Top Navbar -->
+        <nav class="navbar navbar-expand-lg bg-body-tertiary">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="/">Logo</a>
+                <div class="collapse navbar-collapse">
+                    <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+
+                        <!-- User profile Dropdown -->
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" role="button" aria-expanded="false" data-bs-toggle="dropdown">
+                                <img src="{{ user.pfp_url }}" class="me-2" alt="Avatar" width="35" height="35">
+                                <span class="d-none d-md-inline text-white">{{ user.username }}</span>
+                            </a>
+                            <!-- Dropdown menu items -->
+                            <ul class="dropdown-menu dropdown-menu-end shadow">
+                                <li><a class="dropdown-menu-item p-2 d-block text-decoration-none text-white" href="#" id="profile-link">My Profile</a></li>
+                                <li><a class="dropdown-menu-item p-2 d-block text-decoration-none text-white" href="#" id="logout-link">Logout</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Bottom Navbar -->
+        <nav class="navbar navbar-expand-lg bg-body-secondary py-1 shadow mb-3">
+            <div class="container-fluid">
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0 p-1">
+                        <li class="nav-item">
+                            <a class="nav-link active p-1" aria-current="page" href="/">Home</a>
+                        </li>
+                        <div class="vr mx-3"></div>
+                        <li class="nav-item">
+                            <a class="nav-link active p-1" aria-current="page" href="/">Forums</a>
+                        </li>
+                        <div class="vr mx-3"></div>
+                        <li class="nav-item">
+                            <a class="nav-link active p-1" aria-current="page" href="/">Latest</a>
+                        </li>
+                        <div class="vr mx-3"></div>
+                        <li class="nav-item">
+                            <a class="nav-link active p-1" aria-current="page" href="/">Members</a>
+                        </li>
+                        <div class="vr mx-3"></div>
+                        <li class="nav-item">
+                            <a class="nav-link active p-1" aria-current="page" href="/">Groups</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Main -->
+        <!-- General Forum -->
+        <div class="navbar navbar-expand-lg bg-body-tertiary">
+            <div class="container-fluid">
+                <span class="navbar-brand mb-0 h1">General</span>
+            </div>
+        </div>
+        <div class="container-fluid bg-body-secondary">
+            <!-- Threads -->
+            <div class="row">
+                <div class="navbar navbar-expand-lg">
+                    <div class="container-fluid">
+                        <div class="colapse navbar-colapse">
+                            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                                <div class="navbar-brand">Icon</div>
+                                <div class="vr mx-0"></div>
+                                <li class="nav-item">
+                                    <a class="nav-link active">General Discussion</a>
+                                </li>
+                            </ul>
+                        </div>
+                        <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                                YO
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
 </body>
 </html>

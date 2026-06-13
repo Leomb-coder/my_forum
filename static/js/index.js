@@ -1,8 +1,7 @@
-const logout_button = document.getElementById('logout-button')
+const logout_link = document.getElementById('logout-link')
+const profile_link = document.getElementById('profile-link')
 
-
-
-logout_button.addEventListener('click', async (event) => {
+logout_link.addEventListener('click', async (event) => {
     event.preventDefault()
 
     const response = await fetch('api/logout', {
@@ -12,5 +11,11 @@ logout_button.addEventListener('click', async (event) => {
         }
     })
 
-    window.location.href = '/login'
+    window.location.replace('/login')
+})
+
+profile_link.addEventListener('click', async (event) => {
+    event.preventDefault()
+
+    window.location.href = '/profile'
 })
