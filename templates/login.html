@@ -7,6 +7,7 @@
 </head>
 <body>
 <script src="{{ url_for('static', filename='js/login.js') }}" defer></script>
+<h1>Login</h1>
     <form id="login-form">
         <label>
             Email:
@@ -20,5 +21,6 @@
         <br><br>
         <button type="submit">Submit</button>
     </form>
+    <p>Don't have an account? <a href="{{ url_for('register') }}">Register</a></p>
 </body>
 </html>

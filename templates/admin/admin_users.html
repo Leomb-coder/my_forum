@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Users</title>
+</head>
+<body>
+    <h1>All users</h1>
+    <hr>
+    {% for user in users %}
+        <div>
+            <p><b>Id:</b> {{ user.id }}</p>
+            <p><b>Username:</b> {{ user.username }}</p>
+            <p><b>Email:</b> {{ user.email }}</p>
+            <p><b>Role:</b> {{ user.role }}</p>
+        </div>
+        <hr>
+    {% endfor %}
+</body>
+</html>

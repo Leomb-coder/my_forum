@@ -2,20 +2,35 @@ from psycopg2.extras import RealDictCursor
 from werkzeug.security import check_password_hash
 from db import get_connection
 
+def get_all_users():
+    try:
+        conn = get_connection()
+        cursor = conn.cursor(cursor_factory=RealDictCursor)
+        cursor.execute('''SELECT id, username, email, role FROM users''')
+        users = cursor.fetchall()
+
+        return users
+
+    except Exception:
+        raise
+
+    finally:
+        if 'cursor' in locals():
+            cursor.close()
+        if 'conn' in locals():
+            conn.close()
+
 def get_user_by_id(user_id):
     try:
         conn = get_connection()
         cursor = conn.cursor(cursor_factory=RealDictCursor)
-        cursor.execute('''SELECT id, username, email FROM users WHERE id = %s''', (user_id,))
+        cursor.execute('''SELECT id, username, email, role FROM users WHERE id = %s''', (user_id,))
         user = cursor.fetchone()
 
         return user
 
     except Exception as e:
-        return {
-            'success' : False,
-            'message' : e
-        }, 500
+        raise
 
     finally:
         if 'cursor' in locals():
@@ -48,7 +63,7 @@ def delete_user(user_id):
     try:
         conn = get_connection()
         cursor = conn.cursor()
-        cursor.execute('''DELETE * FROM users WHERE id = %s RETURNING id, username, email''', (user_id,))
+        cursor.execute('''DELETE FROM users WHERE id = %s RETURNING id, username, email''', (user_id,))
         conn.commit()
         user = cursor.fetchone()
 

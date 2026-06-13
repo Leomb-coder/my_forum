@@ -1,10 +1,10 @@
 import os
 from functools import wraps
 
-from flask import Flask, render_template, request, session
+from flask import Flask, render_template, request, session, redirect, url_for
 from werkzeug.security import generate_password_hash
 
-from controllers.user_controller import create_user, delete_user, login_user, get_user_by_id
+from controllers.user_controller import create_user, delete_user, login_user, get_user_by_id, get_all_users
 
 app = Flask(__name__)
 app.secret_key = os.getenv('SECRET_KEY')
@@ -13,10 +13,25 @@ def login_required(func):
     @wraps(func)
     def wrapper(*args, **kwargs):
         if 'user_id' not in session:
+            return redirect(url_for('login'))
+
+        return func(*args, **kwargs)
+
+    return wrapper
+
+def admin_required(func):
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        if 'user_id' not in session:
+            return redirect(url_for('login'))
+
+        user = get_user_by_id(session['user_id'])
+
+        if user['role'] != 'admin':
             return {
                 'success' : False,
-                'message' : 'Unauthorized'
-            }, 401
+                'message' : 'Forbidden (You shall not pass)'
+            }, 403
 
         return func(*args, **kwargs)
 
@@ -36,6 +51,16 @@ def register():
 @app.route('/login')
 def login():
     return render_template('login.html')
+
+@app.route('/admin')
+@admin_required
+def admin_panel():
+    return render_template('admin/admin_panel.html')
+
+@app.route('/admin/users')
+@admin_required
+def admin_users():
+    return render_template('admin/admin_users.html', users=get_all_users())
 
 # API Endpoints
 
@@ -135,10 +160,13 @@ def logout_user_route():
             'message' : 'Internal server error'
         }, 500
 
-@app.route('/api/delete_user/<int:id>', methods=['POST'])
+# Admin Endpoints
+
+@app.route('/api/admin/delete_user/<int:user_id>', methods=['DELETE'])
+@admin_required
 def delete_user_route(user_id):
     try:
-        if request.method == 'POST':
+        if request.method == 'DELETE':
             user = delete_user(user_id)
 
             if user is None:

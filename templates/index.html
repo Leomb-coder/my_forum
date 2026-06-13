@@ -6,6 +6,8 @@
     <title>Home</title>
 </head>
 <body>
+<script src="{{ url_for('static', filename='js/index.js') }}" defer></script>
     <h1>Welcome to my forum {{ user.username }}</h1>
+    <button id="logout-button">Logout</button>
 </body>
 </html>
