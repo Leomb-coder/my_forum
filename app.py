@@ -56,6 +56,7 @@ def home():
 @app.route('/forum/<string:slug>')
 def forum(slug):
     current_forum = get_forum_by_slug(slug)
+    user = get_user_by_id(session['user_id'])
 
     if current_forum is None:
         return {
@@ -63,7 +64,7 @@ def forum(slug):
             'message' : 'Forum not found'
         }, 404
 
-    return render_template('forum.html', forum=current_forum)
+    return render_template('forum.html', user=user, get_user=get_user_by_id, forum=current_forum)
 
 @app.route('/profile')
 @login_required

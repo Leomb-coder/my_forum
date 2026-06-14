@@ -25,6 +25,7 @@ create_forum_form.addEventListener('submit', async (event) => {
     event.preventDefault()
 
     const formData = new FormData(create_forum_form)
+    const slug = formData.get('forum-slug')
 
     const response = await fetch('api/admin/create_forum', {
         method: 'POST',
@@ -38,6 +39,7 @@ create_forum_form.addEventListener('submit', async (event) => {
 
     if (data.success) {
         create_forum_form.reset()
+        window.location.href = `/forum/${slug}`
         alert('Forum was created')
     } else {
         alert(data.message)
