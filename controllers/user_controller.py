@@ -24,9 +24,10 @@ def get_user_by_id(user_id):
     try:
         conn = get_connection()
         cursor = conn.cursor(cursor_factory=RealDictCursor)
-        cursor.execute('''SELECT id, username, email, role, pfp_url, location FROM users WHERE id = %s''', (user_id,))
+        cursor.execute('''SELECT * FROM users WHERE id = %s''', (user_id,))
         user = cursor.fetchone()
 
+        user.pop('password', None)
         return user
 
     except Exception as e:
@@ -119,6 +120,62 @@ def change_profile_picture(user_id, url):
         return user.pop('password', None)
 
     except Exception:
+        raise
+
+    finally:
+        if 'cursor' in locals():
+            cursor.close()
+        if 'conn' in locals():
+            conn.close()
+
+def ban_user(username, ban_reason):
+    try:
+        conn = get_connection()
+        cursor = conn.cursor(cursor_factory=RealDictCursor)
+        cursor.execute('''UPDATE users SET banned = TRUE, banned_at = CURRENT_TIMESTAMP, ban_reason = %s WHERE username = %s RETURNING *''', (
+            ban_reason, username,
+        ))
+        conn.commit()
+        user = cursor.fetchone()
+
+        if user is None:
+            return None
+
+        user.pop('password', None)
+
+        return user
+
+    except Exception:
+        if 'conn' in locals():
+            conn.rollback()
+        raise
+
+    finally:
+        if 'cursor' in locals():
+            cursor.close()
+        if 'conn' in locals():
+            conn.close()
+
+def unban_user(username):
+    try:
+        conn = get_connection()
+        cursor = conn.cursor(cursor_factory=RealDictCursor)
+        cursor.execute('''UPDATE users SET banned = FALSE, banned_at = NULL, ban_reason = NULL WHERE username = %s RETURNING *''', (
+            username,
+        ))
+        conn.commit()
+        user = cursor.fetchone()
+
+        if user is None:
+            return None
+
+        user.pop('password', None)
+
+        return user
+
+    except Exception:
+        if 'conn' in locals():
+            conn.rollback()
         raise
 
     finally:

@@ -5,7 +5,7 @@ from flask import Flask, render_template, request, session, redirect, url_for
 from werkzeug.security import generate_password_hash
 
 from controllers.user_controller import create_user, delete_user, login_user, get_user_by_id, get_all_users, \
-    change_profile_picture
+    change_profile_picture, ban_user, unban_user
 
 from controllers.forum_controller import create_forum, get_forum_by_slug
 
@@ -15,8 +15,17 @@ app.secret_key = os.getenv('SECRET_KEY')
 def login_required(func):
     @wraps(func)
     def wrapper(*args, **kwargs):
-        if 'user_id' not in session:
+        user_id = session.get('user_id')
+
+        if not user_id:
             return redirect(url_for('login'))
+
+        user = get_user_by_id(user_id)
+
+        if user['banned']:
+            session.clear()
+
+            return render_template('banned.html', ban_reason=user['ban_reason'])
 
         return func(*args, **kwargs)
 
@@ -179,7 +188,7 @@ def logout_user_route():
             return {
                 'success' : True,
                 'message' : 'User was logged out'
-            }, 204 # No content
+            }, 204
 
     except Exception as e:
         print(e)
@@ -250,6 +259,77 @@ def create_forum_route():
                 'message' : 'Forum created',
                 'data' : forum_created
             }, 201
+
+    except Exception as e:
+        print(e)
+
+        return {
+            'success' : False,
+            'message' : 'Internal server error'
+        }, 500
+
+@app.route('/api/admin/ban_user', methods=['PUT'])
+@admin_required
+def ban_user_route():
+    try:
+        if request.method == 'PUT':
+            data = request.get_json()
+            username = data.get('ban-username')
+            ban_reason = data.get('ban-reason')
+
+            if username is None or ban_reason is None:
+                return {
+                    'success' : False,
+                    'message' : 'Missing required fields'
+                }, 401
+
+            banned_user = ban_user(username, ban_reason)
+
+            if banned_user is None:
+                return {
+                    'success' : False,
+                    'message' : 'User not found'
+                }, 404
+
+            return {
+                'success' : True,
+                'Message' : 'User was banned'
+            }, 200
+
+    except Exception as e:
+        print(e)
+
+        return {
+            'success' : False,
+            'message' : 'Internal server error'
+        }, 500
+
+@app.route('/api/admin/unban_user', methods=['PUT'])
+@admin_required
+def unban_user_route():
+    try:
+        if request.method == 'PUT':
+            data = request.get_json()
+            username = data.get('unban-username')
+
+            if username is None:
+                return {
+                    'success' : False,
+                    'message' : 'Missing required fields'
+                }, 401
+
+            unbanned_user = unban_user(username)
+
+            if unbanned_user is None:
+                return {
+                    'success' : False,
+                    'message' : 'User not found'
+                }, 404
+
+            return {
+                'success' : True,
+                'Message' : 'User was unbanned'
+            }, 200
 
     except Exception as e:
         print(e)

@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Banned</title>
+</head>
+<body>
+    <h1>You got banned</h1>
+    <img src="{{ url_for('static', filename='images/banned.gif') }}" alt="banned gif">
+    <h2>Ban reason: {{ ban_reason }}</h2>
+</body>
+</html>
