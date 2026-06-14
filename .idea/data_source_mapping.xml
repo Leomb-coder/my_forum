@@ -2,6 +2,7 @@
 <project version="4">
   <component name="DataSourcePerFileMappings">
     <file url="file://$PROJECT_DIR$/controllers/forum_controller.py" value="a91c986e-1774-47b7-ab41-1f11ee3044a5" />
+    <file url="file://$PROJECT_DIR$/controllers/thread_controller.py" value="a91c986e-1774-47b7-ab41-1f11ee3044a5" />
     <file url="file://$PROJECT_DIR$/query/alter_table.sql" value="a91c986e-1774-47b7-ab41-1f11ee3044a5" />
     <file url="file://$PROJECT_DIR$/query/create_table.sql" value="a91c986e-1774-47b7-ab41-1f11ee3044a5" />
     <file url="file://$PROJECT_DIR$/query/insert_into.sql" value="a91c986e-1774-47b7-ab41-1f11ee3044a5" />

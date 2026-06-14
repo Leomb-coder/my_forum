@@ -2,6 +2,23 @@ from psycopg2.extras import RealDictCursor
 
 from db import get_connection
 
+def get_all_forums():
+    try:
+        conn = get_connection()
+        cursor = conn.cursor(cursor_factory=RealDictCursor)
+        cursor.execute('''SELECT * FROM forums''')
+        forums = cursor.fetchall()
+
+        return forums
+
+    except Exception:
+        raise
+
+    finally:
+        if 'cursor' in locals():
+            cursor.close()
+        if 'conn' in locals():
+            conn.close()
 
 def create_forum(name, slug, description, icon_url, user_id):
     try:

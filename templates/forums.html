@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Forums</title>
+</head>
+<body>
+    {% if forums %}
+        {% for forum in forums %}
+            <h1>{{ forum.name }}</h1>
+        {% endfor %}
+    {% else %}
+        <h2>No forums available</h2>
+    {% endif %}
+</body>
+</html>

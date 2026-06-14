@@ -5,7 +5,7 @@ form.addEventListener('submit', async (event) => {
 
     const formData = new FormData(form)
 
-    const response = await fetch('/api/register', {
+    const response = await fetch('/api/auth/register', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'

@@ -5,7 +5,7 @@ pfp_form.addEventListener('submit', async (event) => {
 
     const formData = new FormData(pfp_form)
 
-    const response = await fetch('api/change_user_picture', {
+    const response = await fetch('/api/user/change_user_picture', {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json'
