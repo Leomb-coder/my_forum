@@ -24,7 +24,7 @@ def get_user_by_id(user_id):
     try:
         conn = get_connection()
         cursor = conn.cursor(cursor_factory=RealDictCursor)
-        cursor.execute('''SELECT id, username, email, role, pfp_url FROM users WHERE id = %s''', (user_id,))
+        cursor.execute('''SELECT id, username, email, role, pfp_url, location FROM users WHERE id = %s''', (user_id,))
         user = cursor.fetchone()
 
         return user

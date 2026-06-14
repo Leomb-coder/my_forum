@@ -7,6 +7,8 @@ from werkzeug.security import generate_password_hash
 from controllers.user_controller import create_user, delete_user, login_user, get_user_by_id, get_all_users, \
     change_profile_picture
 
+from controllers.forum_controller import create_forum, get_forum_by_slug
+
 app = Flask(__name__)
 app.secret_key = os.getenv('SECRET_KEY')
 
@@ -43,7 +45,25 @@ def admin_required(func):
 @app.route('/')
 @login_required
 def home():
-    return render_template('index.html', user=get_user_by_id(session['user_id']))
+    general_forum = get_forum_by_slug('general')
+
+    return render_template(
+        'index.html',
+        user=get_user_by_id(session['user_id']),
+        general_forum=general_forum
+    )
+
+@app.route('/forum/<string:slug>')
+def forum(slug):
+    current_forum = get_forum_by_slug(slug)
+
+    if current_forum is None:
+        return {
+            'success' : False,
+            'message' : 'Forum not found'
+        }, 404
+
+    return render_template('forum.html', forum=current_forum)
 
 @app.route('/profile')
 @login_required
@@ -62,7 +82,8 @@ def login():
 @app.route('/admin')
 @admin_required
 def admin_panel():
-    return render_template('admin/admin_panel.html')
+    user = get_user_by_id(session['user_id'])
+    return render_template('admin/admin_panel.html', user=user)
 
 @app.route('/admin/users')
 @admin_required
@@ -196,6 +217,46 @@ def change_user_picture():
         }, 500
 
 # Admin Endpoints
+
+@app.route('/api/admin/create_forum', methods=['POST'])
+@admin_required
+def create_forum_route():
+    try:
+        if request.method == 'POST':
+            data = request.get_json()
+            name = data.get('forum-name')
+            slug = data.get('forum-slug')
+            description = data.get('forum-description')
+            icon_url = data.get('forum-icon')
+            created_by = session['user_id']
+
+            if not name or not slug or not description or not created_by:
+                return {
+                    'success' : False,
+                    'message' : 'Missing required fields'
+                }, 400
+
+            forum_created = create_forum(name, slug, description, icon_url, created_by)
+
+            if forum_created is None:
+                return {
+                    'success' : False,
+                    'message' : 'Forum not found'
+                }, 404
+
+            return {
+                'success' : True,
+                'message' : 'Forum created',
+                'data' : forum_created
+            }, 201
+
+    except Exception as e:
+        print(e)
+
+        return {
+            'success' : False,
+            'message' : 'Internal server error'
+        }, 500
 
 @app.route('/api/admin/delete_user/<int:user_id>', methods=['DELETE'])
 @admin_required

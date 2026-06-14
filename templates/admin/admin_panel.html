@@ -1,24 +1,86 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-bs-theme="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
     <title>Admin Panel</title>
 </head>
 <body>
     <script src="{{ url_for('static', filename='js/admin_panel.js') }}" defer></script>
-    <h1>You are an admin</h1>
-    <a href="{{ url_for('admin_users') }}">Get all users</a>
-    <br>
-    <form id="delete-user">
-        <h2>Delete user</h2>
-        <label>
-            User ID:
-            <br><input type="number" name="user_id" required>
-        </label>
-        <br><br>
-        <button type="submit">Delete</button>
-    </form>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous" defer></script>
 
+    <div class="container-fluid px-5">
+        <!-- Top Navbar -->
+        <nav class="navbar navbar-expand-lg bg-body-tertiary shadow">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="/">Logo</a>
+                <div class="vr mx-3"></div>
+                <a class="navbar-brand">Admin Panel</a>
+                <div class="collapse navbar-collapse">
+                    <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+
+                        <!-- User profile Dropdown -->
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" role="button" aria-expanded="false" data-bs-toggle="dropdown">
+                                <img src="{{ user.pfp_url }}" class="me-2" alt="Avatar" width="40" height="40">
+                                <span class="d-none d-md-inline text-white">{{ user.username }}</span>
+                            </a>
+                            <!-- Dropdown menu items -->
+                            <ul class="dropdown-menu dropdown-menu-end shadow">
+                                <li><a class="dropdown-menu-item p-2 d-block text-decoration-none text-white" href="#" id="profile-link">My Profile</a></li>
+                                <li><a class="dropdown-menu-item p-2 d-block text-decoration-none text-white" href="#" id="logout-link">Logout</a></li>
+                                {% if user.role == 'admin' %}
+                                    <li><a class="dropdown-menu-item p-2 d-block text-decoration-none text-white" href="{{ url_for('admin_panel') }}">Admin Panel</a></li>
+                                {% endif %}
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Main -->
+        <div class="container-fluid bg-body-tertiary mt-3">
+            <div class="row p-4">
+                <div class="col">
+                    <form id="create-forum">
+                        <h4 class="mb-3">Create Forum</h4>
+                        <div class="mb-3">
+                            <label for="forum-name">Forum name</label>
+                            <input class="form-control" type="text" name="forum-name" id="forum-name" required>
+                            <div class="form-text">Up to 250 characters</div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="forum-slug">Forum slug</label>
+                            <input class="form-control" type="text" name="forum-slug" id="forum-slug" required>
+                            <div class="form-text">Slug is the url name</div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="forum-description">Forum description</label>
+                            <input class="form-control" type="text" name="forum-description" id="forum-description" required>
+                            <div class="form-text">Explain the forum's topics</div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="forum-icon">Forum icon</label>
+                            <input class="form-control" type="url" name="forum-icon" id="forum-icon">
+                            <div class="form-text">Valid URL - Not required</div>
+                        </div>
+                        <button type="submit" class="btn btn-light">Create Forum</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 </html>
+
+{#    <form id="delete-user">#}
+{#        <h2>Delete user</h2>#}
+{#        <label>#}
+{#            User ID:#}
+{#            <br><input type="number" name="user_id" required>#}
+{#        </label>#}
+{#        <br><br>#}
+{#        <button type="submit">Delete</button>#}
+{#    </form>#}
