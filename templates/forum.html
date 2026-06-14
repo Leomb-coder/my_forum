@@ -6,10 +6,61 @@
     <title>{{ forum.name }}</title>
 </head>
 <body>
+    <script src="{{ url_for('static', filename='js/forum.js') }}" defer></script>
     <h1>{{ forum.name }} Forum</h1>
     <h2>{{ forum.description }}</h2>
     <h3>Created at: {{ forum.created_at }}</h3>
     <h3>Created by: {{ get_user(forum.created_by).username }}</h3>
-    <img src="{{ forum.icon_url }}" alt="Icon">
+    <img src="{{ forum.icon_url }}" alt="Icon" height="80" width="80">
+    <br><br>
+    <form id="create-thread">
+        <label for="thread-title">Thread Title:</label><br>
+        <input name="thread-title" id="thread-title" type="text">
+        <br><br>
+        <label for="thread-content">Thread Content:</label><br>
+        <textarea name="thread-content" id="thread-content"></textarea>
+        <button type="submit">Create Thread</button>
+    </form>
+    <br>
+    {% if threads %}
+        <h2>Threads</h2>
+        {% for thread in threads %}
+            <hr>
+            <div>
+                <h3>{{ thread.title }}</h3>
+                <p>{{ thread.content }}</p>
+            </div>
+            <hr>
+        {% endfor %}
+    {% else %}
+        <h3>No threads</h3>
+    {% endif %}
+
+<script>
+    const create_thread_form = document.getElementById('create-thread')
+
+    create_thread_form.addEventListener('submit', async (event) => {
+
+        const forumSlug = '{{ forum.slug }}'
+        const formData = new FormData(create_thread_form)
+
+        const response = await fetch(`/api/forum/${forumSlug}/create_thread`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(Object.fromEntries(formData))
+        })
+
+        const data = await response.json()
+
+        if (data.success) {
+            create_thread_form.reset()
+        } else {
+            alert(data.message)
+        }
+        console.log(data)
+    })
+</script>
 </body>
 </html>
