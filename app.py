@@ -38,7 +38,12 @@ def home():
 @app.route('/members')
 def members():
     users = get_all_users()
-    return render_template('members.html', users=users)
+    return render_template('members.html', user=get_user_by_id(session['user_id']), members=users)
+
+@app.route('/members/<int:member_id>')
+def member_profile(member_id):
+    member = get_user_by_id(member_id)
+    return render_template('member_profile.html',user=get_user_by_id(session['user_id']), member=member)
 
 @app.route('/forums')
 @login_required
