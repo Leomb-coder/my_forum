@@ -2,6 +2,24 @@ from psycopg2.extras import RealDictCursor
 import re
 from db import get_connection
 
+def get_thread_by_id(thread_id):
+    try:
+        conn = get_connection()
+        cursor = conn.cursor(cursor_factory=RealDictCursor)
+        cursor.execute('''SELECT * FROM threads WHERE id = %s''', (thread_id,))
+        thread = cursor.fetchone()
+
+        return thread
+
+    except Exception:
+        raise
+
+    finally:
+        if 'cursor' in locals():
+            cursor.close()
+        if 'conn' in locals():
+            conn.close()
+
 def get_threads_by_forum_id(forum_id):
     try:
         conn = get_connection()

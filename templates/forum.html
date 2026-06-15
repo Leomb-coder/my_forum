@@ -29,6 +29,11 @@
             <div>
                 <h3>{{ thread.title }}</h3>
                 <p>{{ thread.content }}</p>
+                <a href="{{ url_for('forum_routes.thread',
+                            forum_slug=forum.slug,
+                            thread_id=thread.id,
+                            thread_slug=thread.slug
+                        ) }}">Thread Link</a>
             </div>
             <hr>
         {% endfor %}
