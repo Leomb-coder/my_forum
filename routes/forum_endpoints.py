@@ -1,5 +1,5 @@
 from flask import Blueprint, request, session, render_template
-from controllers.forum_controller import get_forum_by_slug
+from controllers.forum_controller import get_forum_by_slug, get_threads_count
 from controllers.thread_controller import create_thread, create_slug
 from decorators import login_required
 
@@ -22,10 +22,15 @@ def forum(slug):
             'message' : 'Forum not found'
         }, 404
 
-    return render_template('forum.html', user=user, get_user=get_user_by_id, forum=current_forum, threads=threads)
+    return render_template('forum.html',
+                           user=user,
+                           get_user=get_user_by_id,
+                           forum=current_forum,
+                           threads=threads
+                           )
 
 # Open Thread in /id/slug
-@forum_bp.route('<string:forum_slug>/<int:thread_id>/<string:thread_slug>')
+@forum_bp.route('/<string:forum_slug>/<int:thread_id>/<string:thread_slug>')
 def thread(forum_slug, thread_id, thread_slug):
     try:
         current_thread = get_thread_by_id(thread_id)

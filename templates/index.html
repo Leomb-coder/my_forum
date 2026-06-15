@@ -1,109 +1,134 @@
-<!DOCTYPE html>
-<html lang="en" data-bs-theme="dark">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
-    <title>Home</title>
-</head>
-<body>
-<script src="{{ url_for('static', filename='js/global_routes.js') }}" defer></script>
-<script src="{{ url_for('static', filename='js/index.js') }}" defer></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous" defer></script>
+{% extends 'base.html' %}
 
-    <div class="container-fluid px-5">
-        <!-- Top Navbar -->
-        <nav class="navbar navbar-expand-lg bg-body-tertiary">
-            <div class="container-fluid">
-                <a class="navbar-brand" href="/">Logo</a>
-                <div class="collapse navbar-collapse">
-                    <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+{% block tile %}
+    Homepage
+{% endblock %}
 
-                        <!-- User profile Dropdown -->
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" role="button" aria-expanded="false" data-bs-toggle="dropdown">
-                                <img src="{{ user.pfp_url }}" class="me-2" alt="Avatar" width="40" height="40">
-                                <span class="d-none d-md-inline text-white">{{ user.username }}</span>
-                            </a>
-                            <!-- Dropdown menu items -->
-                            <ul class="dropdown-menu dropdown-menu-end shadow">
-                                <li><a class="dropdown-menu-item p-2 d-block text-decoration-none text-white" href="{{ url_for('user_profile') }}" id="profile-link">My Profile</a></li>
-                                <li><a class="dropdown-menu-item p-2 d-block text-decoration-none text-white" href="#" id="logout-link">Logout</a></li>
-                                {% if user.role == 'admin' %}
-                                    <li><a class="dropdown-menu-item p-2 d-block text-decoration-none text-white" href="{{ url_for('admin_panel') }}">Admin Panel</a></li>
-                                {% endif %}
-                            </ul>
-                        </li>
-                    </ul>
-                </div>
+{% block content %}
+
+    <!-- General Forum -->
+    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+        <div class="container-fluid">
+            <span class="navbar-brand mb-0 h1">General Topics</span>
+        </div>
+    </nav>
+    <div class="container-fluid bg-body-secondary shadow py-2">
+        <div class="row py-3">
+            <div class="col-auto" style="padding-left: 62px"></div>
+            <div class="col-auto d-flex p-0">
+                <div class="vr mx-1"></div>
             </div>
-        </nav>
-
-        <!-- Bottom Navbar -->
-        <nav class="navbar navbar-expand-lg bg-body-secondary py-1 shadow mb-3">
-            <div class="container-fluid">
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <ul class="navbar-nav me-auto mb-2 mb-lg-0 p-1">
-                        <li class="nav-item">
-                            <a class="nav-link active p-1" aria-current="page" href="/">Home</a>
-                        </li>
-                        <div class="vr mx-3"></div>
-                        <li class="nav-item">
-                            <a class="nav-link active p-1" aria-current="page" href="{{ url_for('forums') }}">Forums</a>
-                        </li>
-                        <div class="vr mx-3"></div>
-                        <li class="nav-item">
-                            <a class="nav-link active p-1" aria-current="page" href="/">Latest</a>
-                        </li>
-                        <div class="vr mx-3"></div>
-                        <li class="nav-item">
-                            <a class="nav-link active p-1" aria-current="page" href="/">Members</a>
-                        </li>
-                        <div class="vr mx-3"></div>
-                        <li class="nav-item">
-                            <a class="nav-link active p-1" aria-current="page" href="/">Groups</a>
-                        </li>
-                    </ul>
-                </div>
+            <div class="col">
+                <span>Forum</span>
             </div>
-        </nav>
-
-        <!-- Main -->
-        <!-- General Forum -->
-        <div class="navbar navbar-expand-lg bg-body-tertiary">
-            <div class="container-fluid">
-                <span class="navbar-brand mb-0 h1">{{ general_forum.name }}</span>
+            <div class="col-auto d-flex p-0">
+                <div class="vr mx-1"></div>
+            </div>
+            <div class="col d-flex justify-content-center align-items-center">
+                <span>Threads</span>
+            </div>
+            <div class="col-auto d-flex p-0">
+                <div class="vr mx-1"></div>
+            </div>
+            <div class="col d-flex justify-content-center align-items-center">
+                <span>Replies</span>
+            </div>
+            <div class="col-auto d-flex p-0">
+                <div class="vr mx-1"></div>
+            </div>
+            <div class="col d-flex justify-content-center align-items-center">
+                <span>Latest Reply</span>
             </div>
         </div>
-        <div class="container-fluid bg-body-secondary shadow">
-            <!-- Threads -->
-            <div class="row">
-                <div class="navbar navbar-expand-lg">
-                    <div class="container-fluid">
-                        <div class="colapse navbar-colapse">
-                            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                                <div class="navbar-brand">Icon</div>
-                                <div class="vr mx-2"></div>
-                                <li class="nav-item">
-                                    <a class="nav-link active text-body" href="#">General Discussion</a> <!-- General discussion thread -->
-                                </li>
-                            </ul>
-                        </div>
-                        <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-                            <li><a class="nav-link active text-warning">Threads: <span class="text-white">pseudo 1k</span></a></li>
-                            <li><a class="nav-link active text-warning">Replies: <span class="text-white">pseudo 2.8k</span></a></li>
-                            <div class="vr mx-3"></div>
-                            <!-- Latest Thread Info -->
-                            <li><img src="{{ user.pfp_url }}" alt="Avatar" height="38" width="38"></li> <!-- Latest user post avatar -->
-                            <li><a class="nav-link active ps-2 text-body" href="#">Thread Name Here</a></li> <!-- Latest thread link -->
-                            <li><a class="nav-link active text-body">pseudo Yesterday 10:42 AM</a></li> <!-- Latest thread time created -->
-                        </ul>
-                    </div>
+        <hr class="mt-0">
+        <!-- General Forums -->
+        {% for forum in forums %}
+            <div class="row py-1">
+                <div class="col-auto d-flex justify-content-center align-items-center">
+                    <img src="{{ url_for('static', filename='images/tux.png') }}" alt="tux" height="50px" width="50px">
+                </div>
+                <div class="col-auto d-flex p-0">
+                    <div class="vr mx-1"></div>
+                </div>
+                <div class="col">
+                    <a class="link-warning link-offset-2 link-underline-opacity-0 link-underline-opacity-100-hover" href="{{ url_for('forum_routes.forum', slug=forum.slug) }}">{{ forum.name }}</a><br>
+                    <span style="font-size: 14px">{{ forum.description }}</span>
+                </div>
+                <div class="col-auto d-flex p-0">
+                    <div class="vr mx-1"></div>
+                </div>
+                <div class="col d-flex justify-content-center align-items-center">
+                    <span>{{ get_threads_count(forum.id).count }}</span>
+                </div>
+                <div class="col-auto d-flex p-0">
+                    <div class="vr mx-1"></div>
+                </div>
+                <div class="col d-flex justify-content-center align-items-center">
+                    <span>Replies</span>
+                </div>
+                <div class="col-auto d-flex p-0">
+                    <div class="vr mx-1"></div>
+                </div>
+                <div class="col d-flex justify-content-center align-items-center">
+                    <span>Latest Reply</span>
                 </div>
             </div>
-        </div>
-
+        {% endfor %}
     </div>
-</body>
-</html>
+
+{% endblock %}
+
+
+
+{#<!-- Create thread modal -->
+{#                    <div class="modal fade" id="createThreadForm" tabindex="-1" aria-labelledby="#createThreadForm" aria-hidden="true">
+{#                        <div class="modal-dialog">
+{#                            <div class="modal-content">
+{#                                <div class="modal-header">
+{#                                    <h1 class="modal-title fs-5">Create Thread</h1>
+{#                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+{#                                </div>
+{#                                <div class="modal-body">
+{#                                    <form id="thread-form">
+{#                                        <div class="mb-3">
+{#                                            <label for="thread-title" class="form-label">Thread Title</label>
+{#                                            <input type="text" class="form-control" id="thread-title" name="thread-title">
+{#                                        </div>
+{#                                        <div class="mb-3">
+{#                                            <label for="thread-content" class="form-label">Thread Content</label>
+{#                                            <textarea class="form-control" id="thread-content" name="thread-content"></textarea>
+{#                                        </div>
+{#                                    </form>
+{#                                </div>
+{#                                <div class="modal-footer">
+{#                                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+{#                                    <button type="button" class="btn btn-light" id="create-thread-button">Create</button>
+{#                                    <script defer>
+{#                                        const thread_form = document.getElementById('thread-form')
+{#                                        const create_thread_button = document.getElementById('create-thread-button')
+{#
+{#                                        create_thread_button.addEventListener('click', async (event) => {
+{#                                            const formData = new FormData(thread_form)
+{#
+{#                                            const response = await fetch('forum/{{ general_forum.slug }}/create_thread', {
+{#                                                method: 'POST',
+{#                                                headers: {
+{#                                                    'Content-Type': 'application/json'
+{#                                                },
+{#                                                body: JSON.stringify(Object.fromEntries(formData))
+{#                                            })
+{#
+{#                                            const data = await response.json()
+{#
+{#                                            if (data.success) {
+{#                                                thread_form.reset()
+{#                                            } else {
+{#                                                alert(data.message)
+{#                                            }
+{#                                            console.log(data)
+{#                                        })
+{#                                    </script>
+{#                                </div>
+{#                            </div>
+{#                        </div>
+{#                    </div>#}

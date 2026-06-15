@@ -1,10 +1,11 @@
 import os
+
 from decorators import login_required, admin_required
 
 from flask import Flask, render_template, session, request
 
 from controllers.user_controller import get_user_by_id, get_all_users
-from controllers.forum_controller import get_forum_by_slug, get_all_forums
+from controllers.forum_controller import get_forum_by_slug, get_all_forums, get_threads_count
 
 from routes import auth_bp, user_bp, admin_bp, forum_bp
 
@@ -21,12 +22,17 @@ app.register_blueprint(forum_bp, url_prefix='/forum')
 @app.route('/')
 @login_required
 def home():
-    general_forum = get_forum_by_slug('general')
+    general_discussion_forum = get_forum_by_slug('general-discussion')
+
+    gen_forums = [
+        general_discussion_forum
+    ]
 
     return render_template(
         'index.html',
         user=get_user_by_id(session['user_id']),
-        general_forum=general_forum
+        forums=gen_forums,
+        get_threads_count=get_threads_count
     )
 
 @app.route('/forums')
