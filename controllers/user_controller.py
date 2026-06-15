@@ -6,8 +6,9 @@ def get_all_users():
     try:
         conn = get_connection()
         cursor = conn.cursor(cursor_factory=RealDictCursor)
-        cursor.execute('''SELECT id, username, email, role FROM users''')
+        cursor.execute('''SELECT * FROM users''')
         users = cursor.fetchall()
+        users.pop('password', None)
 
         return users
 

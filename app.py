@@ -1,11 +1,11 @@
 import os
 
 from decorators import login_required, admin_required
-
-from flask import Flask, render_template, session, request
+from flask import Flask, render_template, session
 
 from controllers.user_controller import get_user_by_id, get_all_users
-from controllers.forum_controller import get_forum_by_slug, get_all_forums, get_threads_count
+from controllers.forum_controller import get_forum_by_slug, get_all_forums
+from controllers.thread_controller import get_forum_threads_count, get_user_threads_count
 
 from routes import auth_bp, user_bp, admin_bp, forum_bp
 
@@ -32,8 +32,13 @@ def home():
         'index.html',
         user=get_user_by_id(session['user_id']),
         forums=gen_forums,
-        get_threads_count=get_threads_count
+        threads_count=get_forum_threads_count
     )
+
+@app.route('/members')
+def members():
+    users = get_all_users()
+    return render_template('members.html', users=users)
 
 @app.route('/forums')
 @login_required
@@ -45,7 +50,11 @@ def forums():
 @login_required
 def user_profile():
     user_info = get_user_by_id(session['user_id'])
-    return render_template('user_profile.html', user=user_info)
+    return render_template(
+        'user_profile.html',
+                        user=user_info,
+                        threads_count=get_user_threads_count
+                        )
 
 @app.route('/register')
 def register():
