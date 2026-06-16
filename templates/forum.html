@@ -1,4 +1,25 @@
+{% extends 'base.html' %}
 
+{% block title %}
+    {{ forum.name }}
+{% endblock %}
+
+{% block content %}
+    <div class="container-fluid bg-body-tertiary p-3">
+        <div class="row">
+            <div class="col-auto">
+                <img src="{{ forum.icon_url }}" alt="Forum Icon" height="160" width="160">
+            </div>
+            <div class="col">
+                <h3>{{ forum.name }}</h3>
+                <p>{{ forum.description }}</p>
+            </div>
+            <div class="col">
+                <p>Created on: {{ forum.created_at.strftime('%Y-%m-%d') }}</p>
+            </div>
+        </div>
+    </div>
+{% endblock %}
 
 {#    <form id="create-thread">#}
 {#        <label for="thread-title">Thread Title:</label><br>#}
