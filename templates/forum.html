@@ -19,42 +19,138 @@
             </div>
         </div>
     </div>
+    <!-- Threads -->
+    <nav class="navbar navbar-expand-lg bg-body-tertiary mt-3">
+        <div class="container-fluid">
+            <span class="navbar-brand mb-0 h1">Threads</span>
+        </div>
+        <div class="container-fluid">
+            <h5 class="ms-auto me-2 mb-0">Create Thread</h5>
+            <button class="btn btn-light py-1 px-2" type="button" data-bs-toggle="modal" data-bs-target="#createThreadForm">
+                <img src="{{ url_for('static', filename='icons/plus.svg') }}" alt="Create Thread">
+            </button>
+        </div>
+    </nav>
+    <div class="container-fluid bg-body-secondary shadow py-2">
+        <div class="row py-3">
+            <div class="col-auto d-flex p-0">
+                <div class="vr ms-3"></div>
+            </div>
+            <div class="col">
+                <span>Thread</span>
+            </div>
+            <div class="col-auto d-flex p-0">
+                <div class="vr mx-1"></div>
+            </div>
+            <div class="col-1 d-flex justify-content-center align-items-center">
+                <span>Replies</span>
+            </div>
+            <div class="col-auto d-flex p-0">
+                <div class="vr mx-1"></div>
+            </div>
+            <div class="col-3 d-flex justify-content-center align-items-center">
+                <span>Created by</span>
+            </div>
+            <div class="col-auto d-flex p-0">
+                <div class="vr me-3"></div>
+            </div>
+        </div>
+        <hr class="mt-0">
+
+        {% if threads %}
+            {% for thread in threads %}
+                <div class="row py-1 mb-2">
+                    <div class="col-auto d-flex p-0">
+                        <div class="vr ms-3"></div>
+                    </div>
+                    <div class="col">
+                        <a class="link-warning link-offset-2 link-underline-opacity-0 link-underline-opacity-100-hover"
+                           href="{{ url_for('forum_routes.thread', forum_slug=forum.slug, thread_id=thread.id, thread_slug=thread.slug) }}">{{ thread.title }}</a><br>
+                        <span style="font-size: 14px">{{ thread.description }}</span>
+                    </div>
+                    <div class="col-auto d-flex p-0">
+                        <div class="vr mx-1"></div>
+                    </div>
+                    <div class="col-1 d-flex justify-content-center align-items-center">
+                        <span>Replies</span>
+                    </div>
+                    <div class="col-auto d-flex p-0">
+                        <div class="vr mx-1"></div>
+                    </div>
+                    <div class="col-3 d-flex justify-content-center align-items-center">
+                        <a class="m-0 me-2 link-warning link-offset-2 link-underline-opacity-0 link-underline-opacity-100-hover"
+                           href="{{ url_for('member_profile', member_id=thread.user_id) }}">
+                            {{ get_user_id(thread.user_id).username }}
+                        </a>
+                        <span>-</span>
+                        <p class="m-0 ms-2">{{ thread.created_at.strftime('%Y-%m-%d') }}</p>
+                    </div>
+                    <div class="col-auto d-flex p-0">
+                        <div class="vr me-3"></div>
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <div class="col-auto d-flex p-1 align-items-center">
+                <div class="vr me-3"></div>
+                <p class="m-0">No threads</p>
+            </div>
+        {% endif %}
+    </div>
+
+    <!-- Create thread modal -->
+    <div class="modal fade" id="createThreadForm" tabindex="-1" aria-labelledby="#createThreadForm" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5">Create Thread</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="create-thread">
+                        <div class="mb-3">
+                            <label for="thread-title" class="form-label">Thread Title</label>
+                            <input type="text" class="form-control" id="thread-title" name="thread-title">
+                        </div>
+                        <div class="mb-3">
+                            <label for="thread-content" class="form-label">Thread Content</label>
+                            <textarea class="form-control" id="thread-content" name="thread-content"></textarea>
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-light" id="create-thread-button">Create</button>
+                            <script defer>
+                                const create_thread_form = document.getElementById('create-thread')
+
+                                create_thread_form.addEventListener('submit', async (event) => {
+
+                                    const forumSlug = '{{ forum.slug }}'
+                                    const formData = new FormData(create_thread_form)
+
+                                    const response = await fetch(`/forum/${forumSlug}/create_thread`, {
+                                        method: 'POST',
+                                        headers: {
+                                            'Content-Type': 'application/json'
+                                        },
+                                        body: JSON.stringify(Object.fromEntries(formData))
+                                    })
+
+                                    const data = await response.json()
+
+                                    if (data.success) {
+                                        create_thread_form.reset()
+                                    } else {
+                                        alert(data.message)
+                                    }
+                                    console.log(data)
+                                })
+                            </script>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}
-
-{#    <form id="create-thread">#}
-{#        <label for="thread-title">Thread Title:</label><br>#}
-{#        <input name="thread-title" id="thread-title" type="text">#}
-{#        <br><br>#}
-{#        <label for="thread-content">Thread Content:</label><br>#}
-{#        <textarea name="thread-content" id="thread-content"></textarea>#}
-{#        <button type="submit">Create Thread</button>#}
-{#    </form>#}
-
-<script>
-    const create_thread_form = document.getElementById('create-thread')
-
-    create_thread_form.addEventListener('submit', async (event) => {
-
-        const forumSlug = '{{ forum.slug }}'
-        const formData = new FormData(create_thread_form)
-
-        const response = await fetch(`/forum/${forumSlug}/create_thread`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(Object.fromEntries(formData))
-        })
-
-        const data = await response.json()
-
-        if (data.success) {
-            create_thread_form.reset()
-        } else {
-            alert(data.message)
-        }
-        console.log(data)
-    })
-</script>
-</body>
-</html>

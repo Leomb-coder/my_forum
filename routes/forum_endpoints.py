@@ -26,7 +26,8 @@ def forum(slug):
                            user=user,
                            get_user=get_user_by_id,
                            forum=current_forum,
-                           threads=threads
+                           threads=threads,
+                           get_user_id=get_user_by_id
                            )
 
 # Open Thread in /id/slug
