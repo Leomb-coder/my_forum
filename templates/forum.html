@@ -15,7 +15,7 @@
                 <p>{{ forum.description }}</p>
             </div>
             <div class="col">
-                <p>Created on: {{ forum.created_at.strftime('%Y-%m-%d') }}</p>
+                <p>Created on: {{ forum.created_at.strftime('%Y-%m-%d') }} by {{ get_user_id(forum.created_by).username }}</p>
             </div>
         </div>
     </div>
@@ -26,7 +26,7 @@
         </div>
         <div class="container-fluid">
             <h5 class="ms-auto me-2 mb-0">Create Thread</h5>
-            <button class="btn btn-light py-1 px-2" type="button" data-bs-toggle="modal" data-bs-target="#createThreadForm">
+            <button class="btn btn-dark py-1 px-1" type="button" data-bs-toggle="modal" data-bs-target="#createThreadForm">
                 <img src="{{ url_for('static', filename='icons/plus.svg') }}" alt="Create Thread">
             </button>
         </div>
