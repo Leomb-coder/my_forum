@@ -6,7 +6,7 @@ def get_all_forums():
     try:
         conn = get_connection()
         cursor = conn.cursor(cursor_factory=RealDictCursor)
-        cursor.execute('''SELECT * FROM forums''')
+        cursor.execute('''SELECT * FROM forums ORDER BY name''')
         forums = cursor.fetchall()
 
         return forums

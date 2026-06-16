@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Latest Threads
+{% endblock %}
+
+{% block content %}
+    <div class="container-fluid bg-body-secondary p-3 mb-3">
+        <h4 class="mb-3">Threads:</h4>
+        {% if threads %}
+            {% for thread in threads %}
+                <div class="container-fluid pb-2">
+                    <div class="nav">
+                        <div class="container-fluid d-flex p-0">
+                            <a class="text-warning link-underline-opacity-0 link-underline-opacity-100-hover" href="{{ url_for(
+                                    'forum_routes.thread',
+                                    forum_slug=get_forum_by_id(thread.forum_id).slug,
+                                    thread_id=thread.id,
+                                    thread_slug=thread.slug
+                            ) }}">{{ thread.title }}</a>
+                            <p class="ms-auto mb-0">Created at: {{ thread.created_at.strftime('%Y-%m-%d') }}</p>
+                        </div>
+                    </div>
+                    <div class="container-fluid bg-body-tertiary p-3 mt-2">
+                        <p>{{ thread.content }}</p>
+                    </div>
+                </div>
+                {% if not loop.last %}
+                    <hr>
+                {% endif %}
+            {% endfor %}
+        {% else %}
+            <div class="container-fluid">
+                <h4>No Threads</h4>
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}

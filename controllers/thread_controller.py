@@ -2,6 +2,24 @@ from psycopg2.extras import RealDictCursor
 import re
 from db import get_connection
 
+def get_all_threads():
+    try:
+        conn = get_connection()
+        cursor = conn.cursor(cursor_factory=RealDictCursor)
+        cursor.execute('SELECT * FROM threads ORDER BY created_at DESC ')
+        threads = cursor.fetchall()
+
+        return threads
+
+    except Exception:
+        raise
+
+    finally:
+        if 'cursor' in locals():
+            cursor.close()
+        if 'conn' in locals():
+            conn.close()
+
 def get_forum_threads_count(forum_id):
     try:
         conn = get_connection()
@@ -60,7 +78,7 @@ def get_threads_by_forum_id(forum_id):
     try:
         conn = get_connection()
         cursor = conn.cursor(cursor_factory=RealDictCursor)
-        cursor.execute('''SELECT * FROM threads WHERE forum_id = %s''', (forum_id,))
+        cursor.execute('''SELECT * FROM threads WHERE forum_id = %s ORDER BY created_at DESC''', (forum_id,))
         threads = cursor.fetchall()
 
         return threads

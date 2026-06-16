@@ -5,7 +5,8 @@ from flask import Flask, render_template, session
 
 from controllers.user_controller import get_user_by_id, get_all_users
 from controllers.forum_controller import get_forum_by_slug, get_all_forums, get_forum_by_id
-from controllers.thread_controller import get_forum_threads_count, get_user_threads_count, get_threads_by_user_id
+from controllers.thread_controller import get_forum_threads_count, get_user_threads_count, get_threads_by_user_id, \
+    get_all_threads
 
 from routes import auth_bp, user_bp, admin_bp, forum_bp
 
@@ -33,6 +34,16 @@ def home():
         user=get_user_by_id(session['user_id']),
         forums=gen_forums,
         threads_count=get_forum_threads_count
+    )
+
+@app.route('/latest')
+def latest():
+    threads = get_all_threads()
+    return render_template(
+        'latest.html',
+        user=get_user_by_id(session['user_id']),
+        threads=threads,
+        get_forum_by_id=get_forum_by_id
     )
 
 @app.route('/members')
