@@ -1,5 +1,5 @@
 from flask import Blueprint, request, session, render_template
-from controllers.forum_controller import get_forum_by_slug
+from controllers.forum_controller import get_forum_by_slug, get_forum_by_id
 from controllers.thread_controller import create_thread, create_slug
 from decorators import login_required
 

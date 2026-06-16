@@ -74,6 +74,24 @@ def get_threads_by_forum_id(forum_id):
         if 'conn' in locals():
             conn.close()
 
+def get_threads_by_user_id(user_id):
+    try:
+        conn = get_connection()
+        cursor = conn.cursor(cursor_factory=RealDictCursor)
+        cursor.execute('''SELECT * FROM threads WHERE user_id = %s''', (user_id,))
+        threads = cursor.fetchall()
+
+        return threads
+
+    except Exception:
+        raise
+
+    finally:
+        if 'cursor' in locals():
+            cursor.close()
+        if 'conn' in locals():
+            conn.close()
+
 def create_thread(forum_id, user_id, title, slug, content):
     try:
         conn = get_connection()

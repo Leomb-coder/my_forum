@@ -1,11 +1,61 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Title</title>
-</head>
-<body>
+{% extends 'base.html' %}
 
-</body>
-</html>
+{% block title %}
+    {{ member.username }} Profile
+{% endblock %}
+
+{% block content %}
+    <div class="container-fluid bg-body-tertiary p-3">
+        <div class="row row-col-3">
+            <div class="col-auto">
+                <img src="{{ member.pfp_url }}" alt="Profile Picture" height="200px" width="200px" class="shadow">
+            </div>
+            <div class="col">
+                <div class="container-fluid">
+                    <h4>{{ member.username }}</h4>
+                    <p>This is the about me area lol I still have to make this</p>
+                </div>
+            </div>
+            <div class="col">
+                <div class="container-fluid d-flex flex-column">
+                    <div class="col text-center">
+                        <h5>Threads Created:</h5>
+                        <p>{{ threads_count.count }}</p>
+                    </div>
+                    <div class="col text-center">
+                        <h5>Replies Created:</h5>
+                        <p>pseudo 4</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container-fluid bg-body-secondary p-3">
+        <h4 class="mb-3">Threads:</h4>
+        {% if user_threads %}
+            {% for thread in user_threads %}
+                <div class="container-fluid pb-2">
+                    <div class="nav">
+                        <div class="container-fluid d-flex p-0">
+                            <h5 class="mb-0"><a class="text-white" href="{{ url_for(
+                                    'forum_routes.thread',
+                                    forum_slug=get_forum_by_id(thread.forum_id).slug,
+                                    thread_id=thread.id,
+                                    thread_slug=thread.slug
+                            ) }}">{{ thread.title }}</a></h5>
+                            <p class="ms-auto mb-0 mt-1">Created at: {{ thread.created_at.strftime('%Y-%m-%d') }}</p>
+                        </div>
+                    </div>
+                    <div class="container-fluid bg-body-tertiary p-3 mt-2">
+                        <p>{{ thread.content }}</p>
+                    </div>
+                </div>
+                <hr>
+            {% endfor %}
+        {% else %}
+            <div class="container-fluid">
+                <h4>No Threads</h4>
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}

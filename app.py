@@ -4,8 +4,8 @@ from decorators import login_required, admin_required
 from flask import Flask, render_template, session
 
 from controllers.user_controller import get_user_by_id, get_all_users
-from controllers.forum_controller import get_forum_by_slug, get_all_forums
-from controllers.thread_controller import get_forum_threads_count, get_user_threads_count
+from controllers.forum_controller import get_forum_by_slug, get_all_forums, get_forum_by_id
+from controllers.thread_controller import get_forum_threads_count, get_user_threads_count, get_threads_by_user_id
 
 from routes import auth_bp, user_bp, admin_bp, forum_bp
 
@@ -43,13 +43,22 @@ def members():
 @app.route('/members/<int:member_id>')
 def member_profile(member_id):
     member = get_user_by_id(member_id)
-    return render_template('member_profile.html',user=get_user_by_id(session['user_id']), member=member)
+    user_threads = get_threads_by_user_id(member['id'])
+    user_threads_count = get_user_threads_count(member['id'])
+    return render_template(
+        'member_profile.html',
+        user=get_user_by_id(session['user_id']),
+        member=member,
+        threads_count=user_threads_count,
+        user_threads=user_threads,
+        get_forum_by_id=get_forum_by_id
+    )
 
 @app.route('/forums')
 @login_required
 def forums():
     all_forums = get_all_forums()
-    return render_template('forums.html', forums=all_forums)
+    return render_template('forums.html',user=get_user_by_id(session['user_id']) ,forums=all_forums)
 
 @app.route('/profile')
 @login_required

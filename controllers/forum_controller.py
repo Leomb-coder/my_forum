@@ -60,3 +60,21 @@ def get_forum_by_slug(slug):
             cursor.close()
         if 'conn' in locals():
             conn.close()
+
+def get_forum_by_id(forum_id):
+    try:
+        conn = get_connection()
+        cursor = conn.cursor(cursor_factory=RealDictCursor)
+        cursor.execute('''SELECT * FROM forums WHERE id = %s''', (forum_id,))
+        forum = cursor.fetchone()
+
+        return forum
+
+    except Exception:
+        raise
+
+    finally:
+        if 'cursor' in locals():
+            cursor.close()
+        if 'conn' in locals():
+            conn.close()
