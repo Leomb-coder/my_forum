@@ -58,7 +58,7 @@ def member_profile(member_id):
 @login_required
 def forums():
     all_forums = get_all_forums()
-    return render_template('forums.html',user=get_user_by_id(session['user_id']) ,forums=all_forums)
+    return render_template('forums.html',user=get_user_by_id(session['user_id']) ,forums=all_forums, threads_count=get_forum_threads_count)
 
 @app.route('/profile')
 @login_required

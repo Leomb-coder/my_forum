@@ -5,25 +5,28 @@
 {% endblock %}
 
 {% block content %}
-    <div class="row row-cols-3">
-        {% for member in members %}
-            <div class="col d-flex">
-                {% if not loop.first %}
-                    <div class="vr"></div>
-                {% endif %}
-                <div class="navbar w-100">
-                    <div class="container-fluid d-flex align-items-center">
-                        <a class="navbar-brand" href="{{ url_for('member_profile', member_id=member['id']) }}">
-                            <img src="{{ member.pfp_url }}" alt="User Profile Picture" height="40" width="40" class="d-inline-block  mx-2">
-                            {{ member.username }}
-                        </a>
-                        <p class="navbar-text mb-0">Joined on: {{ member.created_at.strftime('%Y-%m-%d') }}</p>
-                        {% if member.role == 'admin' %}
-                            <p class="text-warning mb-0">Admin</p>
-                        {% endif %}
+    <div class="container-fluid bg-body-secondary py-2 px-0">
+        <div class="row row-cols-3">
+            {% for member in members %}
+                <div class="col d-flex">
+                    {% if not loop.first %}
+                        <div class="vr"></div>
+                    {% endif %}
+                    <div class="navbar w-100">
+                        <div class="container-fluid d-flex align-items-center">
+                            <a class="navbar-brand" href="{{ url_for('member_profile', member_id=member['id']) }}">
+                                <img src="{{ member.pfp_url }}" alt="User Profile Picture" height="40" width="40"
+                                     class="d-inline-block  mx-2">
+                                {{ member.username }}
+                            </a>
+                            <p class="navbar-text mb-0">Joined on: {{ member.created_at.strftime('%Y-%m-%d') }}</p>
+                            {% if member.role == 'admin' %}
+                                <p class="text-warning mb-0">Admin</p>
+                            {% endif %}
+                        </div>
                     </div>
                 </div>
-            </div>
-        {% endfor %}
+            {% endfor %}
+        </div>
     </div>
 {% endblock %}

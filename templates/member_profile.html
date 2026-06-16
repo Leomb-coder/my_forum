@@ -13,7 +13,13 @@
             <div class="col">
                 <div class="container-fluid">
                     <h4>{{ member.username }}</h4>
-                    <p>This is the about me area lol I still have to make this</p>
+                    <p>
+                        {% if member.about_me %}
+                            {{ member.about_me }}
+                        {% else %}
+                            No about me section
+                        {% endif %}
+                    </p>
                 </div>
             </div>
             <div class="col">

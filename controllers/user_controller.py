@@ -6,7 +6,7 @@ def get_all_users():
     try:
         conn = get_connection()
         cursor = conn.cursor(cursor_factory=RealDictCursor)
-        cursor.execute('''SELECT id, username, role, pfp_url, location, banned, ban_reason, created_at FROM users''')
+        cursor.execute('''SELECT id, username, role, pfp_url, location, banned, ban_reason, created_at FROM users ORDER BY username''')
         users = cursor.fetchall()
 
         return users
