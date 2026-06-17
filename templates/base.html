@@ -67,6 +67,14 @@
             </div>
         </nav>
 
+        {% block subtitle_navbar %}
+            <nav class="navbar navbar-expand-lg bg-body-tertiary">
+                <div class="container-fluid">
+                    <span class="navbar-brand mb-0 h1">{% block subtitle %}{% endblock %}</span>
+                </div>
+            </nav>
+        {% endblock %}
+
         <main>
             {% block content %}
             {% endblock %}

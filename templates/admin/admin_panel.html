@@ -4,10 +4,14 @@
     Admin Panel
 {% endblock %}
 
+{% block subtitle %}
+    Admin Panel
+{% endblock %}
+
 {% block content %}
     <script src="{{ url_for('static', filename='js/admin_panel.js') }}" defer></script>
     <!-- Main -->
-    <div class="container-fluid bg-body-tertiary mt-3">
+    <div class="container-fluid bg-body-secondary">
         <div class="row p-4">
             <div class="col">
                 <form id="create-forum">

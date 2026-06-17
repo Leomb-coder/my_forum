@@ -183,3 +183,25 @@ def unban_user(username):
             cursor.close()
         if 'conn' in locals():
             conn.close()
+
+def insert_user_about_me(user_id, content):
+    try:
+        conn = get_connection()
+        cursor = conn.cursor(cursor_factory=RealDictCursor)
+        cursor.execute('''UPDATE users SET about_me = %s WHERE id = %s RETURNING *''',(content, user_id,))
+        conn.commit()
+        user = cursor.fetchone()
+        user.pop('password', None)
+
+        return user
+
+    except Exception:
+        if 'conn' in locals():
+            conn.rollback()
+        raise
+
+    finally:
+        if 'cursor' in locals():
+            cursor.close()
+        if 'conn' in locals():
+            conn.close()

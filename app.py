@@ -1,5 +1,6 @@
 import os
 
+from controllers.replies_controller import get_replies_count_by_user_id
 from decorators import login_required, admin_required
 from flask import Flask, render_template, session
 
@@ -55,12 +56,14 @@ def members():
 def member_profile(member_id):
     member = get_user_by_id(member_id)
     user_threads = get_threads_by_user_id(member['id'])
+    user_replies_count = get_replies_count_by_user_id(member['id'])
     user_threads_count = get_user_threads_count(member['id'])
     return render_template(
         'member_profile.html',
         user=get_user_by_id(session['user_id']),
         member=member,
         threads_count=user_threads_count,
+        replies_count=user_replies_count,
         user_threads=user_threads,
         get_forum_by_id=get_forum_by_id
     )
@@ -78,7 +81,8 @@ def user_profile():
     return render_template(
         'user_profile.html',
                         user=user_info,
-                        threads_count=get_user_threads_count
+                        threads_count=get_user_threads_count,
+                        replies_count=get_replies_count_by_user_id
                         )
 
 @app.route('/register')

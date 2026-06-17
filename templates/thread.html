@@ -1,13 +1,79 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ thread.title }}</title>
-</head>
-<body>
-    <h1>{{ thread.title }}</h1>
-    <h2>{{ thread.content }}</h2>
-    <h3>Created by: {{ get_user(thread.user_id).username }}</h3>
-</body>
-</html>
+{% extends 'base.html' %}
+
+{% block title %}
+    {{ thread.title }}
+{% endblock %}
+
+{% block subtitle_navbar %}
+{% endblock %}
+
+{% block content %}
+    <div class="container-fluid p-0">
+        <nav class="navbar navbar-expand-lg bg-body-tertiary">
+            <div class="container-fluid py-1 px-3">
+                <img src="{{ get_forum(thread.forum_id).icon_url }}" alt="Forum Icon" height="50" width="50">
+                <div class="container-fluid d-flex flex-column align-items-start">
+                    <h5><a class="text-white link-underline link-underline-opacity-0"
+                           href="{{ url_for('forum_routes.forum', slug=get_forum(thread.forum_id).slug) }}">{{ get_forum(thread.forum_id).name }}</a></h5>
+                    <p class="m-0"><a class="text-warning link-underline link-underline-opacity-0"
+                                      href="{{ url_for('member_profile', member_id=get_user(thread.user_id).id) }}">{{ get_user(thread.user_id).username }}</a></p>
+                </div>
+                <div class="container-fluid d-flex justify-content-end">
+                    <p class="m-0">{{ thread.created_at.strftime('%Y-%m-%d %H:%M') }}</p>
+                </div>
+            </div>
+        </nav>
+        <div class="container-fluid bg-body-secondary p-3">
+            <h4>{{ thread.title }}</h4>
+            <p>{{ thread.content }}</p>
+        </div>
+
+        <div class="container-fluid p-3 mt-3 bg-body-secondary">
+            <form id="create-reply" class="mb-3">
+                <div class="container p-0">
+                    <label for="reply-content" class="form-label">Reply thread:</label>
+                    <textarea class="form-control" id="reply-content" name="reply-content"></textarea>
+                </div>
+                <button type="submit" class="btn btn-light py-1 mt-3">Reply</button>
+                <script defer>
+                    const create_reply_form = document.getElementById('create-reply')
+
+                    create_reply_form.addEventListener('submit', async (event) => {
+                        const formData = new FormData(create_reply_form)
+                        event.preventDefault()
+
+                        const response = await fetch('/forum/{{ thread.id }}/create_reply', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify(Object.fromEntries(formData))
+                        })
+
+                        const data = await response.json()
+                        if (data.success) {
+                            create_reply_form.reset()
+                        } else {
+                            console.log(data)
+                        }
+                    })
+                </script>
+            </form>
+
+            {% for reply in replies %}
+                <div class="container-fluid bg-body-tertiary p-3">
+                    <nav class="navbar navbar-expand-lg">
+                        <nav class="container-fluid ps-3">
+                            <h5 class="m-0">{{ get_user(reply.user_id).username }}</h5>
+                            <p class="m-0 ms-auto">{{ reply.created_at.strftime('%Y-%m-%d') }}</p>
+                        </nav>
+                    </nav>
+                    <hr class="m-2">
+                    <div class="container-fluid ps-3">
+                        <p>{{ reply.content }}</p>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

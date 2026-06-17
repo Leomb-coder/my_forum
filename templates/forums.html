@@ -4,15 +4,13 @@
     Forums
 {% endblock %}
 
+{% block subtitle %}
+    Forums
+{% endblock %}
+
 {% block content %}
-    <!-- General Forum -->
-    <nav class="navbar navbar-expand-lg bg-body-tertiary">
-        <div class="container-fluid">
-            <span class="navbar-brand mb-0 h1">Forums</span>
-        </div>
-    </nav>
     <div class="container-fluid bg-body-secondary shadow py-2 pt-0">
-        <!-- General Forums -->
+        <!-- Forums -->
         <div class="row row-cols-2 p-3 pe-0 pt-0">
             {% for forum in forums %}
                 <div class="col mt-3 pe-0">

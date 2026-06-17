@@ -4,6 +4,10 @@
     {{ user.username }} Profile
 {% endblock %}
 
+{% block subtitle %}
+    User Profile
+{% endblock %}
+
 {% block content %}
     <script src="{{ url_for('static', filename='js/user_profile.js') }}" defer></script>
 
@@ -36,8 +40,39 @@
                     <hr>
                     <div class="row">
                         <div class="col"><span class="text-warning">Threads started: </span>{{ threads_count(user.id).count }}</div> <!-- Threads created by this user id -->
-                        <div class="col"><span class="text-warning">Total replies: </span>pseudo 1.3k</div> <!-- Replies by this user id -->
+                        <div class="col"><span class="text-warning">Total replies: </span>{{ replies_count(user.id).count }}</div> <!-- Replies by this user id -->
                         <div class="col"><span class="text-warning">Sent messages: </span>pseudo 3.5k</div> <!-- Messages sent by this user id -->
+                    </div>
+                    <div class="container-fluid p-0 mt-3">
+                        <form id="change-aboutme">
+                            <label for="content" class="form-label">Change about-me</label>
+                            <textarea name="content" id="content" class="form-control"></textarea>
+                            <button type="submit" class="btn btn-light py-1 mt-3">Submit</button>
+                            <script defer>
+                                const change_aboutme_form = document.getElementById('change-aboutme')
+
+                                change_aboutme_form.addEventListener('submit', async (event) => {
+                                    const formData = new FormData(change_aboutme_form)
+                                    event.preventDefault()
+
+                                    const response = await fetch('/api/user/change_about_me', {
+                                        method: 'PUT',
+                                        headers: {
+                                            'Content-Type': 'application/json'
+                                        },
+                                        body: JSON.stringify(Object.fromEntries(formData))
+                                    })
+
+                                    const data = await response.json()
+                                    if (data.success) {
+                                        change_aboutme_form.reset()
+                                    } else {
+                                        alert(data.message)
+                                    }
+                                    console.log(data)
+                                })
+                            </script>
+                        </form>
                     </div>
                 </div>
             </div>

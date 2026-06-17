@@ -4,12 +4,16 @@
     Latest Threads
 {% endblock %}
 
+{% block subtitle %}
+	Latest Threads
+{% endblock %}
+
 {% block content %}
     <div class="container-fluid bg-body-secondary p-3 mb-3">
         <h4 class="mb-3">Threads:</h4>
         {% if threads %}
             {% for thread in threads %}
-                <div class="container-fluid pb-2">
+                <div class="container-fluid p-0">
                     <div class="nav">
                         <div class="container-fluid d-flex p-0">
                             <a class="text-warning link-underline-opacity-0 link-underline-opacity-100-hover" href="{{ url_for(
