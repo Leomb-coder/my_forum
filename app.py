@@ -1,6 +1,6 @@
 import os
 
-from controllers.replies_controller import get_replies_count_by_user_id
+from controllers.replies_controller import get_replies_count_by_user_id, get_replies_count_by_forum
 from decorators import login_required, admin_required
 from flask import Flask, render_template, session
 
@@ -72,7 +72,13 @@ def member_profile(member_id):
 @login_required
 def forums():
     all_forums = get_all_forums()
-    return render_template('forums.html',user=get_user_by_id(session['user_id']) ,forums=all_forums, threads_count=get_forum_threads_count)
+    return render_template(
+        'forums.html',
+        user=get_user_by_id(session['user_id']),
+        forums=all_forums,
+        threads_count=get_forum_threads_count,
+        replies_count=get_replies_count_by_forum
+        )
 
 @app.route('/profile')
 @login_required

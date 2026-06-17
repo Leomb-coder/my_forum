@@ -62,3 +62,24 @@ def get_replies_count_by_user_id(user_id):
             cursor.close()
         if 'conn' in locals():
             conn.close()
+
+def get_replies_count_by_forum(forum_id):
+    try:
+        conn = get_connection()
+        cursor = conn.cursor(cursor_factory=RealDictCursor)
+
+        cursor.execute('''
+            SELECT COUNT(r.id) AS count FROM replies r JOIN threads t ON r.thread_id = t.id WHERE t.forum_id = %s
+        ''', (forum_id,))
+        replies = cursor.fetchone()
+
+        return replies
+
+    except Exception:
+        raise
+
+    finally:
+        if 'cursor' in locals():
+            cursor.close()
+        if 'conn' in locals():
+            conn.close()
